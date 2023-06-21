@@ -1,7 +1,12 @@
-export default function Home() {
+import React from 'react';
+import BlogsPage from './blogs/page';
+
+const Home = () => {
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
-      <div>Hello To HK Blogs</div>
-    </main>
+    <>
+      <BlogsPage />
+    </>
   );
-}
+};
+
+export default Home;

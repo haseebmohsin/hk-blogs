@@ -1,79 +1,112 @@
 'use client';
+import { useState, useEffect, useRef } from 'react';
 
-import Router, { useRouter } from 'next/navigation';
-// import { signOut, useSession } from 'next-auth/react';
-import Image from 'next/image';
+const Header = () => {
+  const navItems = ['Home', 'Blogs', 'About'];
 
-export default function Header() {
-  const route = useRouter();
-  // const { data: session, status } = useSession();
+  const profileDropdownRef = useRef(null);
 
-  const handleRoute = (path) => {
-    route.push(path);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleProfileDropdown = () => {
+    setIsProfileOpen(!isProfileOpen);
+    setIsMenuOpen(false);
   };
 
-  const isDashboardPage = route.pathname === '/dashboard';
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    setIsProfileOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className='relative'>
-      <nav className='fixed top-0 z-50 w-full px-12 bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
-        <div className='px-3 py-3 lg:px-5 lg:pl-3'>
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center justify-start'>
-              <Image src='/agri-logo.png' alt='logo' width={55} height={40} />
+    <header className='bg-gray-700 py-4 px-8 flex items-center justify-between'>
+      <div className='flex items-center'>
+        <span className='text-xl font-bold text-white'>HK Blogs</span>
 
-              <div className='flex justify-center items-center gap-6 ml-16'>
-                <div className='flex justify-center items-center cursor-pointer' onClick={() => handleRoute('/dashboard')}>
-                  <Image src='/svg/home.svg' alt='home' width={25} height={25} />
-                  <p className='text-center mx-3'>Home</p>
-                </div>
+        <nav className='hidden md:flex ml-8 space-x-8 text-white'>
+          {navItems.map((item, index) => (
+            <a key={index} href={`/${item.toLowerCase()}`} className='hover:text-gray-300'>
+              {item}
+            </a>
+          ))}
+        </nav>
+      </div>
 
-                {!isDashboardPage && (
-                  <>
-                    <div className='flex justify-center items-center cursor-pointer' onClick={() => handleRoute('/inventory')}>
-                      <Image src='/svg/inventory.svg' alt='Inventory' width={25} height={25} />
-                      <p className='text-center mx-3'>Inventory</p>
-                    </div>
+      <div className='hidden md:flex items-center'>
+        <div className='relative group text-white' ref={profileDropdownRef}>
+          <button className='flex items-center space-x-2 focus:outline-none' onClick={toggleProfileDropdown}>
+            <span className='text-white'>Profile</span>
 
-                    <div className='flex justify-center items-center cursor-pointer' onClick={() => handleRoute('/purchases')}>
-                      <Image src='/svg/purchases.svg' alt='purchases' width={25} height={25} />
-                      <p className='text-center mx-3'>Purchases</p>
-                    </div>
+            <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' viewBox='0 0 20 20' fill='currentColor'>
+              <path fillRule='evenodd' d='M10 12a2 2 0 100-4 2 2 0 000 4z' />
+              <path fillRule='evenodd' d='M2 10a8 8 0 1116 0 8 8 0 01-16 0zm8-6a6 6 0 100 12 6 6 0 000-12z' />
+            </svg>
+          </button>
 
-                    <div className='flex justify-center items-center cursor-pointer' onClick={() => handleRoute('/crops')}>
-                      <Image src='/svg/crops.svg' alt='crops' width={25} height={25} />
-                      <p className='text-center mx-3'>Crops</p>
-                    </div>
-
-                    <div
-                      className='flex justify-center items-center cursor-pointer'
-                      onClick={() => handleRoute('/cropsUtilization')}>
-                      <Image src='/svg/schedule.svg' alt='schedule' width={25} height={25} />
-                      <p className='text-center mx-3 whitespace-nowrap'>All Schedules</p>
-                    </div>
-                  </>
-                )}
-              </div>
+          {isProfileOpen && (
+            <div className='absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl'>
+              <a href='/profile' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                Profile
+              </a>
+              <a href='/logout' className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'>
+                Logout
+              </a>
             </div>
+          )}
+        </div>
+      </div>
 
-            <div
-              className='flex justify-center items-center cursor-pointer'
-              onClick={async () => {
-                const data = await signOut({ redirect: false, callbackUrl: '/' });
-                Router.push(data.url);
-              }}>
-              <Image src='/svg/logout.svg' alt='logout' width={25} height={25} />
+      <div className='md:hidden relative'>
+        <button className='text-gray-400 hover:text-white focus:outline-none' onClick={toggleMenu}>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            className='h-6 w-6'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'>
+            <path d='M4 6h16M4 12h16M4 18h16'></path>
+          </svg>
+        </button>
 
-              <p className='ml-2 select-none whitespace-nowrap'>Sign out</p>
+        {isMenuOpen && (
+          <div className='mt-2 py-2 w-full shadow-xl fixed inset-x-0 top-14 bg-gray-700'>
+            {navItems.map((item, index) => (
+              <a key={index} href={`/${item.toLowerCase()}`} className='block px-4 py-2 text-sm text-white hover:bg-gray-600'>
+                {item}
+              </a>
+            ))}
+
+            <div>
+              <a href='/profile' className='block px-4 py-2 text-sm text-white hover:bg-gray-600'>
+                Profile
+              </a>
+              <a href='/logout' className='block px-4 py-2 text-sm text-white hover:bg-gray-600'>
+                Logout
+              </a>
             </div>
           </div>
-        </div>
-      </nav>
-
-      {/* hero image */}
-      <div className='relative w-full h-[260px]'>
-        <Image src='/images/hero-img.jpg' alt='logo' fill className='object-cover' />
+        )}
       </div>
-    </div>
+    </header>
   );
-}
+};
+
+export default Header;
