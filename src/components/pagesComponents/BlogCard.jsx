@@ -9,12 +9,12 @@ const BlogCard = ({ post }) => {
 
   return (
     <div className='bg-white rounded shadow-md p-6'>
-      <Link href={`/blogs/${_id}`}>
+      <Link href={`/dashboard/blogs/${_id}`}>
         <Image src={image} alt={title} width={400} height={200} className='w-full h-40 object-cover mb-4 rounded' />
       </Link>
 
       <h2 className='text-xl font-semibold mb-2'>
-        <Link href={`/blogs/${_id}`}>{title}</Link>
+        <Link href={`/dashboard/blogs/${_id}`}>{title}</Link>
       </h2>
 
       <p className='text-gray-600 mb-4'>{content.length > 150 ? `${content.slice(0, 150)}...` : content}</p>

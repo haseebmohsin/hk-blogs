@@ -1,5 +1,5 @@
 import React from 'react';
-import Loader from './Loader';
+import Loader from '../Loader';
 
 export default function Button({ children, className, isLoading, checkAuthLoading, ...rest }) {
   const buttonClassNames = `
