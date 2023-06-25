@@ -21,7 +21,10 @@ const BlogCard = ({ post }) => {
 
       <div className='flex items-center justify-between text-sm text-gray-500'>
         <div className='flex'>
-          <span className='mr-2'>By: {author}</span>
+          <Image src={image} alt={title} width={30} height={30} className='w-full h-40 object-cover mb-4 rounded' />
+          <span className='mr-2'>
+            By <span className='font-semibold'>{author}</span>
+          </span>
         </div>
 
         <div className='flex'>

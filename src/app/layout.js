@@ -1,5 +1,9 @@
-import NextAuthSessionProvider from '@/providers/sessionProvider';
 import './globals.css';
+import NextAuthSessionProvider from '@/providers/SessionProvider';
+import ToastProvider from '@/providers/toastProvider';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]/route';
+import { redirect } from 'next/navigation';
 
 import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
@@ -9,7 +13,10 @@ export const metadata = {
   description: 'IT Insights',
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  // const session = await getServerSession(authOptions);
+  // if (!session) redirect('/login');
+
   return (
     <html lang='en'>
       <body className={inter.className}>

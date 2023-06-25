@@ -1,5 +1,5 @@
-import { data } from '@/data/data';
 import React, { useState } from 'react';
+import { data } from '@/data/data';
 
 function SearchBar({ searchTerm, setSearchTerm, onSearch }) {
   return (

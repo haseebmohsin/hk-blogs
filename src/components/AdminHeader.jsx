@@ -1,13 +1,14 @@
 'use client';
+
+import { useState, useEffect, useRef } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
 import Loader from './Loader';
 
-const Header = () => {
-  const navItems = ['Home', 'Blogs'];
+const AdminHeader = () => {
+  const navItems = ['Dashboard'];
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const profileDropdownRef = useRef(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,9 +38,9 @@ const Header = () => {
   }, []);
 
   return (
-    <header className='bg-gray-700 py-4 px-8 flex items-center justify-between'>
+    <header className='py-4 px-8 flex items-center justify-between bg-emerald-700'>
       <div className='flex items-center'>
-        <span className='text-xl font-bold text-white'>HK Blogs</span>
+        <span className='text-lg font-semibold text-white'>HK Blogs Admin Console</span>
 
         <nav className='hidden md:flex ml-8 space-x-8 text-white'>
           {navItems.map((item, index) => (
@@ -126,4 +127,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default AdminHeader;
