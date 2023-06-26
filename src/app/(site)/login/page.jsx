@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { signIn, useSession } from 'next-auth/react';
@@ -27,7 +27,6 @@ export default function Login() {
     validationSchema,
 
     onSubmit: async (values, { setSubmitting }) => {
-      console.log(values);
       signIn('credentials', { ...values, redirect: false })
         .then((callback) => {
           setSubmitting(true);
