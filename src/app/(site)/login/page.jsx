@@ -39,6 +39,10 @@ export default function Login() {
             toast.success('Logged in successfully!');
           }
         })
+        .catch((error) => {
+          console.log(error);
+          // toast.error(error);
+        })
         .finally(() => {
           setSubmitting(false);
         });
