@@ -1,6 +1,6 @@
 import './globals.css';
 import NextAuthSessionProvider from '@/providers/SessionProvider';
-import ToastProvider from '@/providers/toastProvider';
+import ToastProvider from '@/providers/ToastProvider';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
