@@ -30,6 +30,8 @@ export default function Login() {
       console.log(values);
       signIn('credentials', { ...values, redirect: false })
         .then((callback) => {
+          setSubmitting(true);
+
           if (callback?.error) {
             toast.error(callback.error);
           }
@@ -39,7 +41,7 @@ export default function Login() {
           }
         })
         .finally(() => {
-          // setSubmitting(false);
+          setSubmitting(false);
         });
     },
   });
@@ -49,10 +51,6 @@ export default function Login() {
       router.push('/dashboard');
     }
   }, [session, router]);
-
-  useEffect(() => {
-    console.log(isSubmitting);
-  }, [isSubmitting]);
 
   return (
     <>
