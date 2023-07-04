@@ -45,26 +45,33 @@ export const authOptions = {
           throw new Error('Incorrect password');
         }
 
-        return user;
+        const { hashedPassword, ...userWithoutPass } = user;
+
+        return userWithoutPass;
       },
     }),
   ],
-  secret: process.env.SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
+
   pages: { signIn: '/login' },
+
   session: {
     strategy: 'jwt',
     maxAge: 86400,
   },
+
   callbacks: {
     jwt: async ({ token, user }) => {
       user && (token.user = user);
       return token;
     },
+
     session: async ({ session, token }) => {
       session.user = token.user;
       return session;
     },
   },
+
   debug: process.env.NODE_ENV === 'development',
 };
 

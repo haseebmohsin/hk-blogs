@@ -1,11 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import Image from 'next/image';
+import axios from 'axios';
+import Link from 'next/link';
+import Loader from '@/components/Loader';
+import Button from '@/components/customComponents/Button';
 
 export default function Register() {
+  const router = useRouter();
+  const [isLoading, setLoading] = useState(false);
+
   const [data, setData] = useState({
     name: '',
     email: '',
@@ -14,10 +21,22 @@ export default function Register() {
 
   const registerUser = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     axios
       .post('/api/register', data)
-      .then(() => toast.success('User has been registered!'))
-      .catch(() => toast.error('Something went wrong!'));
+      .then((response) => {
+        toast.success('User has been registered!');
+        router.push('./login');
+        console.log(response);
+      })
+      .catch((error) => {
+        toast.error('Something went wrong!');
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -70,12 +89,14 @@ export default function Register() {
                 <label htmlFor='password' className='block text-sm font-medium leading-6 text-gray-900'>
                   Password
                 </label>
+
                 <div className='text-sm'>
                   <a href='#' className='font-semibold text-indigo-600 hover:text-indigo-500'>
                     Forgot password?
                   </a>
                 </div>
               </div>
+
               <div className='mt-2'>
                 <input
                   id='password'
@@ -91,13 +112,17 @@ export default function Register() {
             </div>
 
             <div>
-              <button
-                type='submit'
-                className='flex w-full justify-center rounded-md bg-indigo-600 px-3 p-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
+              <Button className='w-full py-3' isLoading={isLoading}>
                 Register
-              </button>
+              </Button>
             </div>
           </form>
+
+          <div className='text-sm mt-6 text-center'>
+            <Link href='/login' className='font-semibold text-gray-600 hover:text-gray-700'>
+              Already have an account? Login here.
+            </Link>
+          </div>
         </div>
       </div>
     </>

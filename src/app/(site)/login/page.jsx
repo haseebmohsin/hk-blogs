@@ -8,6 +8,8 @@ import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Input from '@/components/customComponents/Input';
+import Link from 'next/link';
+import Button from '@/components/customComponents/Button';
 
 export default function Login() {
   const session = useSession();
@@ -27,21 +29,16 @@ export default function Login() {
     validationSchema,
 
     onSubmit: async (values, { setSubmitting }) => {
-      signIn('credentials', { ...values, redirect: false })
-        .then((callback) => {
-          setSubmitting(true);
+      setSubmitting(true);
 
+      await signIn('credentials', { ...values, redirect: false })
+        .then((callback) => {
           if (callback?.error) {
             toast.error(callback.error);
-          }
-
-          if (callback?.ok && !callback?.error) {
-            toast.success('Logged in successfully!');
           }
         })
         .catch((error) => {
           console.log(error);
-          // toast.error(error);
         })
         .finally(() => {
           setSubmitting(false);
@@ -50,6 +47,7 @@ export default function Login() {
   });
 
   useEffect(() => {
+    console.log(session);
     if (session?.status === 'authenticated') {
       router.push('/dashboard');
     }
@@ -108,12 +106,9 @@ export default function Login() {
             </div>
 
             <div>
-              <button
-                type='submit'
-                className='flex w-full justify-center rounded-md bg-indigo-600 px-3 p-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-                disabled={isSubmitting}>
-                {isSubmitting ? 'Logging in...' : 'Sign in'}
-              </button>
+              <Button className='w-full py-3' isLoading={isSubmitting}>
+                Login
+              </Button>
             </div>
           </form>
 
@@ -126,6 +121,12 @@ export default function Login() {
 
             <span className='mx-auto'>Login with Google</span>
           </button>
+
+          <div className='text-sm mt-6 text-center'>
+            <Link href='/register' className='font-semibold text-gray-600 hover:text-gray-700'>
+              Don&apos;t have an account? Register here.
+            </Link>
+          </div>
         </div>
       </div>
     </>
